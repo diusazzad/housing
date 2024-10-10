@@ -25,8 +25,8 @@ class City extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function landmarks(): HasMany
-    {
-        return $this->hasMany(Landmark::class);
-    }
+    // public function landmarks(): HasMany
+    // {
+    //     return $this->hasMany(Landmark::class);
+    // }
 }

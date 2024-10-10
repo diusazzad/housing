@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Builder;
 use App\Models\City;
+use App\Models\Project;
 use Illuminate\Http\Request;
 
 class LandingPage extends Controller
@@ -25,10 +27,20 @@ class LandingPage extends Controller
 
     public function retriveLandmarkCitiesData()
     {
-        $cities = City::with('landmarks')->get();
+        $cities = City::with('localities.landmarks')->get();
 
         // Return the data as JSON or pass it to a view
         return response()->json($cities);
+    }
+    public function builderData()
+    {
+        $builders = Builder::all();
+        return response()->json($builders);
+    }
+    public function projectData()
+    {
+        $projects = Project::with('builders')->get();
+        return response($projects);
     }
 
     //  accordion 

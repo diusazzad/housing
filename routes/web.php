@@ -8,9 +8,11 @@ use Illuminate\Support\Facades\Route;
 
 Route::controller(LandingPage::class)->group(function () {
     Route::get('/', 'index');
-    Route::get('/rcd', 'retriveCitiesData');
-    Route::get('/cld', 'ctl');
-    Route::get('/city-landmark-retrive', 'retriveLandmarkCitiesData');
+    Route::get('/city-retrive', 'retriveCitiesData');
+    Route::get('/city-locality-retrive', 'ctl');
+    Route::get('/city-locality-landmark-retrive', 'retriveLandmarkCitiesData');
+    Route::get('/builder-retrive', 'builderData');
+    Route::get('/project-retrive', 'projectData');
 
     // Route::get('/', 'accordion');
 });
