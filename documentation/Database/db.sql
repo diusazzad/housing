@@ -21,6 +21,7 @@ VALUES
 	(4, 'Houston', 'Texas', 'USA', NOW(), NOW()),
 	(5, 'Phoenix', 'Arizona', 'USA', NOW(), NOW());
 
+
 INSERT INTO
 	`localities` (
 		`id`,
@@ -71,6 +72,7 @@ VALUES
 		NOW(),
 		NOW()
 	);
+
 
 INSERT INTO
 	`landmarks` (
@@ -123,6 +125,7 @@ VALUES
 		NOW()
 	);
 
+
 INSERT INTO
 	`builders` (
 		`id`,
@@ -174,6 +177,7 @@ VALUES
 		NOW()
 	);
 
+
 INSERT INTO
 	`projects`(
 		`id`,
@@ -204,6 +208,7 @@ INSERT INTO
 		`updated_at`
 	)
 VALUES
+
 	(
 		1,
 		1,
@@ -288,6 +293,8 @@ VALUES
 		NOW(),
 		NOW()
 	)
+
+
 INSERT INTO
 	`floors`(
 		`id`,
@@ -363,6 +370,7 @@ VALUES
 		NOW()
 	);
 
+
 INSERT INTO
 	`amenities` (
 		`id`,
@@ -413,6 +421,7 @@ VALUES
 		NOW(),
 		NOW()
 	);
+
 
 INSERT INTO
 	`project_details` (
@@ -488,6 +497,7 @@ VALUES
 		NOW(),
 		NOW()
 	);
+
 
 INSERT INTO
 	`markets` (
@@ -593,3 +603,7 @@ VALUES
 		NOW(),
 		NOW()
 	);
+
+
+
+	-- end

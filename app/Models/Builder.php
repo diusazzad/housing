@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Builder extends Model
 {
@@ -16,8 +17,8 @@ class Builder extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function projects(): HasMany
+    public function builder(): BelongsTo
     {
-        return $this->hasMany(Comment::class, 'foreign_key', 'local_key');
+        return $this->belongsTo(Builder::class);
     }
 }

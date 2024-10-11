@@ -27,4 +27,9 @@ class Locality extends Model
     {
         return $this->hasMany(Landmark::class);
     }
+
+    // public function projects(): HasMany
+    // {
+    //     return $this->hasMany(Project::class);
+    // }
 }

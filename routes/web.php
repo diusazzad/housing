@@ -12,7 +12,9 @@ Route::controller(LandingPage::class)->group(function () {
     Route::get('/city-locality-retrive', 'ctl');
     Route::get('/city-locality-landmark-retrive', 'retriveLandmarkCitiesData');
     Route::get('/builder-retrive', 'builderData');
-    Route::get('/project-retrive', 'projectData');
+    Route::get('/project-retrive', 'retrieveProjectsWithLocalities');
+    Route::get('/project-city-retrive', 'retrieveProjectsWithCityName');
+    Route::get('/projectdetail-project-retrive', 'retrieveProjectsWithProjectDetail');
 
     // Route::get('/', 'accordion');
 });

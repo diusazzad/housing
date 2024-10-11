@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Project extends Model
 {
@@ -34,7 +36,18 @@ class Project extends Model
         'more_about_project'
     ];
 
-        
+    public function locality(): BelongsTo
+    {
+        return $this->belongsTo(Locality::class);
+    }
 
+    public function builder(): BelongsTo
+    {
+        return $this->belongsTo(Builder::class);
+    }
 
+    public function project_detail(): HasMany
+    {
+        return $this->hasMany(ProjectDetail::class);
+    }
 }
