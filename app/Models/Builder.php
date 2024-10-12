@@ -10,7 +10,7 @@ class Builder extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'contact_info', 'website'];
+    protected $fillable = ['name', 'contact_info', 'established_year', 'description', 'website'];
 
     /**
      * Get all of the comments for the Builder

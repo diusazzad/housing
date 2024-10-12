@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id(); // Auto-incrementing primary key
             $table->string('name'); // Not Null
             $table->string('contact_info')->nullable(); // Nullable
+            $table->integer('established_year')->nullable();
+            $table->text('description')->nullable();
             $table->string('website')->nullable(); // Nullable
             $table->timestamps(); // Created at & Updated at
         });

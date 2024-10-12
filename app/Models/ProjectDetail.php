@@ -17,7 +17,8 @@ class ProjectDetail extends Model
         'review',
         'project_brochure',
         'project_payment_plan',
-        'project_offer'
+        'project_offer',
+        'image_path'
     ];
 
     public function project(): BelongsTo

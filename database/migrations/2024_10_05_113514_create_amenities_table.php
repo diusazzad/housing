@@ -12,11 +12,17 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('amenities', function (Blueprint $table) {
-            $table->id(); // Auto-incrementing primary key
-            $table->foreignId('project_id')->constrained()->onDelete('cascade'); // Foreign Key referencing projects(id)
-            $table->text('amenities')->nullable(); // Nullable
-            $table->string('amenities_icon')->nullable(); // Nullable
-            $table->timestamps(); // Created at & Updated at
+            // $table->id(); // Auto-incrementing primary key
+            // $table->foreignId('project_id')->constrained()->onDelete('cascade'); // Foreign Key referencing projects(id)
+            // $table->text('amenities')->nullable(); // Nullable
+            // $table->string('amenities_icon')->nullable(); // Nullable
+            // $table->timestamps(); // Created at & Updated at
+
+            $table->id();
+            $table->foreignId('project_id')->constrained()->onDelete('cascade');
+            $table->string('amenity_name');
+            $table->text('description')->nullable(); // Optional, for details about the amenity
+            $table->timestamps();
         });
     }
 

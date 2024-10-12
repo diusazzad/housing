@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('project_brochure')->nullable(); // Nullable
             $table->text('project_payment_plan')->nullable(); // Nullable
             $table->text('project_offer')->nullable(); // Nullable
+            $table->string('image_path');
             $table->timestamps(); // Created at & Updated at 
         });
     }
