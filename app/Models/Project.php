@@ -36,13 +36,13 @@ class Project extends Model
         // 'more_about_project'
 
         'locality_id',
-        'developer_id',
+        'builder_id',
         'project_name',
         'price_range',
         'bhk_configurations',
         'carpet_area_range',
         'rera_registration',
-        'possession_date'
+        'possession_date',
     ];
 
     public function locality(): BelongsTo

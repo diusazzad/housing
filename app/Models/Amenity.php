@@ -10,7 +10,11 @@ class Amenity extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['project_id', 'amenity_name', 'description'];
+    protected $fillable = [
+        'project_id',
+        'amenity_name',  // Changed from 'name' to 'amenity_name'
+        'description'
+    ];
 
     public function project(): BelongsTo
     {

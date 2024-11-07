@@ -19,8 +19,33 @@ Route::controller(LandingPage::class)->group(function () {
     // Route::get('/', 'accordion');
 });
 
-Route::prefix('upload')->controller(FileUploadController::class)->group(function () {
-    Route::get('/city', 'cities');
+Route::controller(FileUploadController::class)->group(function () {
+    Route::get('/cities/create', 'createCities')->name('cities.create');
+    Route::post('/cities', 'storeCity')->name('cities.store');
+    // Routes for Localities
+    Route::get('/localities/create', 'createLocalities')->name('localities.create');
+    Route::post('/localities', 'storeLocality')->name('localities.store');
+    // Routes for Landmarks
+    Route::get('/landmarks/create', 'createLandmarks')->name('landmarks.create');
+    Route::post('/landmarks', 'storeLandmarks')->name('landmarks.store');
+    // Routes for Builders
+    Route::get('/builders/create', 'createBuilders')->name(name: 'builders.create');
+    Route::post('/builders', 'storeBuilders')->name('builders.store');
+    // Routes for Projects
+    Route::get('/projects/create', 'createProjects')->name('projects.create');
+    Route::post('/projects', 'storeProjects')->name('projects.store');
+    // Routes for Amenities 
+    Route::get('/amenities/create', 'createAmenities')->name('amenities.create');
+    Route::post('/amenities', 'storeAmenities')->name('amenities.store');
+    // Routes for Project Details
+    Route::get('/projectdetails/create', 'createProjectDetails')->name('project_details.create');
+    Route::post('/projectdetails', 'storeProjectDetails')->name('project_details.store');
+    // Route for Floor Plan
+    Route::get('/floorplan/create', 'createFloorPlan')->name('floor_plan.create');
+    Route::post('/floorplan', 'storeFloorPlan')->name('floor_plan.store');
+    // Route for Markets
+    Route::get('/markets/create', 'createMarkets')->name('markets.create');
+    Route::post('/markets', 'storeMarkets')->name('markets.store');
 });
 
 Route::get('/dashboard', function () {
