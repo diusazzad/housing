@@ -12,16 +12,17 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('project_details', function (Blueprint $table) {
-            $table->id(); // Auto-incrementing primary key
-            $table->foreignId('project_id')->constrained()->onDelete('cascade'); // Foreign Key referencing projects(id)
-            $table->text('project_specification')->nullable(); // Nullable
-            $table->text('locality_advantage')->nullable(); // Nullable
-            $table->text('review')->nullable(); // Nullable
-            $table->string('project_brochure')->nullable(); // Nullable
-            $table->text('project_payment_plan')->nullable(); // Nullable
-            $table->text('project_offer')->nullable(); // Nullable
-            $table->string('image_path');
-            $table->timestamps(); // Created at & Updated at 
+
+            $table->id();
+            $table->foreignId('project_id')->constrained()->onDelete('cascade');
+            $table->text('project_specification')->nullable();
+            $table->text('locality_advantage')->nullable();
+            $table->text('review')->nullable();
+            $table->string('project_brochure')->nullable();
+            $table->text('project_payment_plan')->nullable();
+            $table->text('project_offer')->nullable();
+            $table->string('image_path')->nullable(); // Store the image path
+            $table->timestamps();
         });
     }
 

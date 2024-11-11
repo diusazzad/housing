@@ -38,14 +38,16 @@ Route::controller(FileUploadController::class)->group(function () {
     Route::get('/amenities/create', 'createAmenities')->name('amenities.create');
     Route::post('/amenities', 'storeAmenities')->name('amenities.store');
     // Routes for Project Details
-    Route::get('/projectdetails/create', 'createProjectDetails')->name('project_details.create');
-    Route::post('/projectdetails', 'storeProjectDetails')->name('project_details.store');
+    Route::get('/projectdetails/create', 'createProjectDetails')->name('projectdetails.create');
+    Route::post('/projectdetails', 'storeProjectDetails')->name('projectdetails.store');
     // Route for Floor Plan
-    Route::get('/floorplan/create', 'createFloorPlan')->name('floor_plan.create');
-    Route::post('/floorplan', 'storeFloorPlan')->name('floor_plan.store');
+    // Route::get('/floorplan/create', 'createFloorPlan')->name('floor_plan.create');
+    // Route::post('/floorplan', 'storeFloorPlan')->name('floor_plan.store');
     // Route for Markets
-    Route::get('/markets/create', 'createMarkets')->name('markets.create');
-    Route::post('/markets', 'storeMarkets')->name('markets.store');
+    // Route::get('/markets/create', 'createMarkets')->name('markets.create');
+    // Route::post('/markets', 'storeMarkets')->name('markets.store');
+
+    
 });
 
 Route::get('/dashboard', function () {

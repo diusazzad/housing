@@ -30,8 +30,8 @@ class StoreFormRequest extends FormRequest
 		// }
 
 		// Default return value for all other routes
-		// return false;
-		return $this->is(['cities', 'localities', 'builders', 'landmarks', 'projects', 'amenities']);
+		return true;
+		// return $this->is(['cities', 'localities', 'builders', 'landmarks', 'projects', 'amenities', 'projectdetails']);
 	}
 
 	/**
@@ -117,14 +117,14 @@ class StoreFormRequest extends FormRequest
 				];
 			case 'projectdetails.store':
 				return [
-					'project_id' => 'required|exists:projects,id', // Ensure project exists
+					'project_id' => 'required|exists:projects,id',
 					'project_specification' => 'nullable|string',
 					'locality_advantage' => 'nullable|string',
 					'review' => 'nullable|string',
 					'project_brochure' => 'nullable|string',
 					'project_payment_plan' => 'nullable|string',
 					'project_offer' => 'nullable|string',
-					'image_path' => 'nullable|string', // You may want to validate file uploads separately if applicable.
+					'image_path' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Adjust max size as needed
 				];
 			default:
 				return [];

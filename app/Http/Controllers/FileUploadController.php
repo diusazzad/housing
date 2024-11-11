@@ -6,6 +6,7 @@ use App\Http\Requests\StoreFormRequest;
 use App\Models\Amenity;
 use App\Models\Builder;
 use App\Models\City;
+use App\Models\ImageTestModel;
 use App\Models\Landmark;
 use App\Models\Locality;
 use App\Models\Project;
@@ -13,6 +14,7 @@ use App\Models\ProjectDetail;
 use Illuminate\Contracts\Cache\Store;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class FileUploadController extends Controller
 {
@@ -106,12 +108,19 @@ class FileUploadController extends Controller
     }
     public function createProjectDetails()
     {
-        $projects = Project::all();
-        return view('upload.projectdetails', compact('projects'));
+    $projects = Project::all();
+    // Load existing project details
+    $projectDetails = ProjectDetail::with('project')->get();
+    return view('upload.projectdetails', compact('projects', 'projectDetails'));
     }
     public function storeProjectDetails(StoreFormRequest $request)
     {
-        ProjectDetail::create($request->validated());
-        return redirect()->route('projectdetails.create')->with('success', 'Project Detail added successfully');
+        $validatedData = $request->validated();
+        if ($request->hasFile('image_path')) {
+            $imagePath = $request->file('image_path')->store('project_images', 'public');
+            $validatedData['image_path'] = $imagePath;
+        }
+        ProjectDetail::create($validatedData);
+        return redirect()->route('projectdetails.create')->with('success', 'Project detail added successfully.');
     }
 }
