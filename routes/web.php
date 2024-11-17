@@ -46,9 +46,9 @@ Route::controller(FileUploadController::class)->group(function () {
     // Route for Markets
     // Route::get('/markets/create', 'createMarkets')->name('markets.create');
     // Route::post('/markets', 'storeMarkets')->name('markets.store');
-
-    
 });
+
+
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -61,3 +61,4 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__ . '/auth.php';
+require __DIR__ . '/cms.php';

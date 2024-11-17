@@ -123,4 +123,8 @@ class FileUploadController extends Controller
         ProjectDetail::create($validatedData);
         return redirect()->route('projectdetails.create')->with('success', 'Project detail added successfully.');
     }
+
+    public function form(){
+        return view('upload.form');
+    }
 }

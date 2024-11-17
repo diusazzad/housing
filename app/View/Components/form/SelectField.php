@@ -6,23 +6,24 @@ use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-class input extends Component
+class SelectField extends Component
 {
-   
     /**
      * Create a new component instance.
      */
+
+
+
     public function __construct()
     {
-        
     }
-
+    
 
     /**
      * Get the view / contents that represent the component.
      */
     public function render(): View|Closure|string
     {
-        return view('components.form.input');
+        return view('components.form.select-field');
     }
 }
