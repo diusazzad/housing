@@ -17,8 +17,8 @@ class Builder extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function builder(): BelongsTo
+    public function city(): BelongsTo
     {
-        return $this->belongsTo(Builder::class);
+        return $this->belongsTo(City::class);
     }
 }

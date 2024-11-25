@@ -9,115 +9,98 @@ use App\Models\Floor;
 use App\Models\Landmark;
 use App\Models\Locality;
 use App\Models\Project;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 
 class cmsController extends Controller
 {
-    public function form()
+    public function cmsIndex()
     {
-        // Fetch cities and localities from the database
-        $cities = City::all(); // Assuming you have a City model
-        $localities = Locality::all(); // Assuming you have a Locality model
+        try {
+            // Fetch all cities with their localities, landmarks, projects, project details, and builders
+            $cities = City::with(['localities.landmarks', 'localities.projects.projectDetail', 'localities.projects.builder','localities.projects.amenities'])->get();
     
-        // Return the view with the necessary data
-        return view('upload.form', [
-            'cities' => $cities,
-            'localities' => $localities,
-        ]);
-    }
-    public function createForm(Request $request){
-
-        // Validate the incoming request
-    $validated = $request->validate([
-        // City validation
-        'city_id' => 'required|exists:cities,id',
-        
-        // Locality validation
-        'name' => 'required|string|max:255',
-        'description' => 'nullable|string',
-
-        // Builder validation
-        'builder_name' => 'required|string|max:255',
-        'contact_info' => 'nullable|string',
-        'established_year' => 'nullable|integer',
-        'builder_description' => 'nullable|string',
-        'website' => 'nullable|url',
-
-        // Landmark validation
-        'locality_id' => 'nullable|exists:localities,id',
-        'landmark_name' => 'nullable|string|max:255',
-        'landmark_description' => 'nullable|string',
-
-        // Project validation
-        'project_locality_id' => 'nullable|exists:localities,id',
-        'builder_id' => 'nullable|exists:builders,id',
-        'project_name' => 'required|string|max:255',
-        'price_range' => 'nullable|string',
-        'bhk_configurations' => 'nullable|string',
-
-        // Floor validation
-        'project_id' => 'nullable|exists:projects,id',
-        'floor_section' => 'nullable|string',
-        'floor_segment_1' => 'nullable|string',
-        'segment_price_1' => 'nullable|numeric',
-        'segment_sqft_1' => 'nullable|numeric',
-        'segment_emi_1' => 'nullable|numeric',
-        'segment_floor_image_1' => 'nullable|image|mimes:jpg,png,jpeg|max:2048',
-    ]);
-
-    try {
-        // Save Locality
-        $locality = Locality::create([
-            'city_id' => $validated['city_id'],
-            'name' => $validated['name'],
-            'description' => $validated['description'] ?? null,
-        ]);
-
-        // Save Builder
-        $builder = Builder::create([
-            'name' => $validated['builder_name'],
-            'contact_info' => $validated['contact_info'] ?? null,
-            'established_year' => $validated['established_year'] ?? null,
-            'description' => $validated['builder_description'] ?? null,
-            'website' => $validated['website'] ?? null,
-        ]);
-
-        // Save Landmark
-        $landmark = Landmark::create([
-            'locality_id' => $validated['locality_id'] ?? null,
-            'name' => $validated['landmark_name'] ?? null,
-            'description' => $validated['landmark_description'] ?? null,
-        ]);
-
-        // Save Project
-        $project = Project::create([
-            'locality_id' => $validated['project_locality_id'] ?? null,
-            'builder_id' => $builder->id,
-            'name' => $validated['project_name'],
-            'price_range' => $validated['price_range'] ?? null,
-            'bhk_configurations' => $validated['bhk_configurations'] ?? null,
-        ]);
-
-        // Save Floor
-        $floorData = [
-            'project_id' => $project->id,
-            'section' => $validated['floor_section'] ?? null,
-            'segment_1' => $validated['floor_segment_1'] ?? null,
-            'price_1' => $validated['segment_price_1'] ?? null,
-            'sqft_1' => $validated['segment_sqft_1'] ?? null,
-            'emi_1' => $validated['segment_emi_1'] ?? null,
-        ];
-
-        // Handle Floor Image Upload
-        if ($request->hasFile('segment_floor_image_1')) {
-            $floorData['image_1'] = $request->file('segment_floor_image_1')->store('floor_images', 'public');
+            // Transform the data into a structured format
+            $data = $cities->map(function ($city) {
+                return [
+                    'name' => $city->name,
+                    'state' => $city->state,
+                    'country' => $city->country,
+                    'localities' => $city->localities->map(function ($locality) {
+                        return [
+                            'name' => $locality->name,
+                            'description' => $locality->description,
+                            'landmarks' => $locality->landmarks->map(function ($landmark) {
+                                return [
+                                    'name' => $landmark->name,
+                                    'description' => $landmark->description,
+                                ];
+                            }),
+                            'projects' => $locality->projects->map(function ($project) {
+                                return [
+                                    'project_name' => $project->project_name,
+                                    'price_range' => $project->price_range,
+                                    'bhk_configurations' => $project->bhk_configurations,
+                                    'carpet_area_range' => $project->carpet_area_range,
+                                    'rera_registration' => $project->rera_registration,
+                                    'possession_date' => $project->possession_date,
+                                    'builder' => [
+                                        'name' => $project->builder->name,
+                                        'contact_info' => $project->builder->contact_info,
+                                        'established_year' => $project->builder->established_year,
+                                        'description' => $project->builder->description,
+                                        'website' => $project->builder->website,
+                                    ],
+                                    'project_detail' => $project->projectDetail ? [
+                                        'project_specification' => $project->projectDetail->project_specification,
+                                        'locality_advantage' => $project->projectDetail->locality_advantage,
+                                        'review' => $project->projectDetail->review,
+                                        'project_brochure' => $project->projectDetail->project_brochure,
+                                        'project_payment_plan' => $project->projectDetail->project_payment_plan,
+                                        'project_offer' => $project->projectDetail->project_offer,
+                                        'image_path' => $project->projectDetail->image_path,
+                                    ] : null,
+                                    'amenities' => $project->amenities ? [
+                                        'amenity_name' => $project->amenities->amenity_name,
+                                        'description' => $project->amenities->description,
+                                    ] : null,
+                                ];
+                            }),
+                        ];
+                    }),
+                ];
+            });
+    
+            return response()->json([
+                'success' => true,
+                'data' => $data,
+            ], 200);
+        } catch (ModelNotFoundException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Data not found.',
+            ], 404);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred while fetching data.',
+                'error' => $e->getMessage(),
+            ], 500);
         }
-
-        Floor::create($floorData);
-
-        return redirect()->route('form.create')->with('success', 'Data saved successfully!');
-    } catch (\Exception $e) {
-        return redirect()->route('form.create')->with('error', 'Failed to save data: ' . $e->getMessage());
     }
+    
+    public function cmsCreate()
+    {
+        $cities = City::all();
+        return view('upload.form', compact('cities','localites','ent'));
+    }
+    public function cmsStore(Request $request){
+        $request->validate([
+            'name' => 'required',
+            'state' => 'required',
+            'country' => 'required',
+        ]);
+
+        return redirect()->route('form.create')->with('success', 'City Added Successfully');
     }
 }

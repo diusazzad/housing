@@ -20,13 +20,12 @@ class City extends Model
     {
         return $this->hasMany(Locality::class);
     }
-    /**
-     * Get all of the comments for the City
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    // public function landmarks(): HasMany
-    // {
-    //     return $this->hasMany(Landmark::class);
-    // }
+    public function builders(): HasMany
+    {
+        return $this->hasMany(Builder::class);
+    }
+    public function projects(): HasMany
+    {
+        return $this->hasMany(Project::class);
+    }
 }

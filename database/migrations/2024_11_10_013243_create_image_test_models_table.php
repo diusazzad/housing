@@ -13,10 +13,9 @@ return new class extends Migration
     {
         Schema::create('image_test_models', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->text('description');
-            $table->string('image')->nullable();
-            
+            $table->string('name'); // Image name
+            $table->string('mime_type'); // Mime type (e.g., image/png)
+            $table->binary('image_data'); // Store image as BLOB
             $table->timestamps();
         });
     }

@@ -6,13 +6,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Project extends Model
 {
     use HasFactory;
 
+
     protected $fillable = [
-        
         'locality_id',
         'builder_id',
         'project_name',
@@ -22,7 +23,10 @@ class Project extends Model
         'rera_registration',
         'possession_date',
     ];
-
+    public function city(): BelongsTo
+    {
+        return $this->belongsTo(City::class);
+    }
     public function locality(): BelongsTo
     {
         return $this->belongsTo(Locality::class);
@@ -33,13 +37,15 @@ class Project extends Model
         return $this->belongsTo(Builder::class);
     }
 
-    public function project_detail(): HasMany
+
+    public function projectDetail(): HasOne
     {
-        return $this->hasMany(ProjectDetail::class);
+        return $this->hasOne(ProjectDetail::class);
     }
 
-    public function amenities(): HasMany
+    public function amenities(): HasOne
     {
-        return $this->hasMany(Amenity::class);
+        return $this->hasOne(Amenity::class);
     }
+
 }
