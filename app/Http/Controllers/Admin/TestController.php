@@ -160,7 +160,8 @@ class TestController extends Controller
     //############################## city-locality-store
     public function cityLocalityIndex()
     {
-        return view('test.cityLocality');
+      
+        return view('test.cityLocalityIndex');
     }
     public function cityLocalityCreate()
     {
@@ -258,15 +259,20 @@ class TestController extends Controller
                         // Create project details if provided
                         if (isset($projectData['project_details'])) {
                             foreach ($projectData['project_details'] as $detailData) {
-                                // Handle image upload if present
-                                if ($request->hasFile('image_path')) {
-                                    $imageName = time() . '.' . $request->image_path->extension();
-                                    $request->image_path->move(public_path('images'), $imageName);
-                                    $detailData['image_path'] = $imageName; // Store the image path in detail data
+                                // Handle image upload
+                                if (isset($detailData['image_path']) && $detailData['image_path'] instanceof \Illuminate\Http\UploadedFile) {
+                                    // Generate a unique filename
+                                    $imageName = uniqid() . '.' . $detailData['image_path']->getClientOriginalExtension();
+
+                                    // Move the file to public/images directory
+                                    $imagePath = $detailData['image_path']->move(public_path('images'), $imageName);
+
+                                    // Store only the filename in the database
+                                    $detailData['image_path'] = $imageName;
                                 }
 
-                                $detailData['project_id'] = $project->id; // Associate with the created project
-                                $project->projectDetail()->create($detailData); // Save project detail (assuming you have a relationship defined)
+                                $detailData['project_id'] = $project->id;
+                                $project->projectDetail()->create($detailData);
                             }
                         }
                     }

@@ -16,7 +16,7 @@ Route::prefix('/test')->controller(TestController::class)->group(function () {
     Route::get('/form/create', 'createForm')->name('form.create');
     Route::post('/form/index', 'createForm')->name('form.store');
     // city locality store
-    Route::get('/citylocality/index', 'cityLocalityIndex')->name('citylocality.index');
+    Route::get('/citylocality/{project}', 'cityLocalityIndex')->name('citylocality.index');
     Route::get('/citylocality/create', 'cityLocalityCreate')->name('cityLocality.create');
     Route::post('/citylocality/index', 'cityLocalityStore')->name('cityLocality.store');
 });
