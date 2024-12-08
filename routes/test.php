@@ -16,7 +16,10 @@ Route::prefix('/test')->controller(TestController::class)->group(function () {
     Route::get('/form/create', 'createForm')->name('form.create');
     Route::post('/form/index', 'createForm')->name('form.store');
     // city locality store
-    Route::get('/citylocality/{project}', 'cityLocalityIndex')->name('citylocality.index');
+    Route::get('/citylocality/index', 'cityLocalityIndex')->name('citylocality.index');
     Route::get('/citylocality/create', 'cityLocalityCreate')->name('cityLocality.create');
-    Route::post('/citylocality/index', 'cityLocalityStore')->name('cityLocality.store');
+    Route::post('/citylocality/create', 'cityLocalityStore')->name('cityLocality.store');
+    Route::get('/citylocality/{city}/edit', 'cityLocalityEdit')->name('cityLocality.edit');
+    Route::put('/citylocality/{city}', 'cityLocalityUpdate')->name('cityLocality.update');
+    Route::delete('/citylocality/{city}', 'cityLocalityDestroy')->name('cityLocality.destroy');
 });

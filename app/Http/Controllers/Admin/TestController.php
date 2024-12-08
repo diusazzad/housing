@@ -37,7 +37,13 @@ class TestController extends Controller
     }
     public function formIndex()
     {
-        return view('test.form');
+        $cities = City::with(['localities.landmarks', 'localities.projects.projectDetail'])
+            ->latest()
+            ->get();
+
+        $builders = Builder::latest()->get();
+
+        return view('test.form', compact('cities', 'builders'));
     }
     public function createForm()
     {
@@ -157,11 +163,17 @@ class TestController extends Controller
         return redirect()->route('form.index')->with('success', 'Form Added Successfully');
     }
 
-    //############################## city-locality-store
+    ############################## city-locality-store
     public function cityLocalityIndex()
     {
-      
-        return view('test.cityLocalityIndex');
+
+        $cities = City::with(['localities.landmarks', 'localities.projects.projectDetail'])
+            ->latest()
+            ->get();
+
+        $builders = Builder::latest()->get();
+
+        return view('test.form', compact('cities', 'builders'));
     }
     public function cityLocalityCreate()
     {
@@ -296,6 +308,114 @@ class TestController extends Controller
                 'error',
                 'Failed to create city, localities, landmarks, builder, and projects. Please try again.'
             );
+        }
+    }
+
+    public function cityLocalityEdit(City $city)
+    {
+        // Load the city with its relationships
+        $city->load(['localities.landmarks', 'localities.projects.projectDetail']);
+
+        return view('test.citylocality.edit', compact('city'));
+    }
+
+    public function cityLocalityUpdate(Request $request, City $city)
+    {
+        try {
+            DB::beginTransaction();
+
+            // Validate the request
+            $request->validate([
+                'city.name' => 'required|string|max:255',
+                'city.state' => 'required|string|max:255',
+                'city.country' => 'required|string|max:255',
+                'localities.*.name' => 'required|string|max:255',
+                'localities.*.landmarks' => 'nullable|array',
+                'localities.*.projects' => 'nullable|array',
+            ]);
+
+            // Update city
+            $city->update([
+                'name' => $request->input('city.name'),
+                'state' => $request->input('city.state'),
+                'country' => $request->input('city.country'),
+            ]);
+
+            // Update localities
+            foreach ($request->input('localities', []) as $localityId => $localityData) {
+                $locality = Locality::findOrFail($localityId);
+                $locality->update([
+                    'name' => $localityData['name'],
+                    // Add other fields as needed
+                ]);
+
+                // Update landmarks
+                if (isset($localityData['landmarks'])) {
+                    $locality->landmarks()->delete(); // Remove old landmarks
+                    foreach ($localityData['landmarks'] as $landmarkData) {
+                        $locality->landmarks()->create([
+                            'name' => $landmarkData['name'],
+                            // Add other landmark fields
+                        ]);
+                    }
+                }
+
+                // Update projects
+                if (isset($localityData['projects'])) {
+                    foreach ($localityData['projects'] as $projectData) {
+                        $project = $locality->projects()->findOrFail($projectData['id']);
+                        $project->update([
+                            'project_name' => $projectData['name'],
+                            // Add other project fields
+                        ]);
+
+                        // Update project details if needed
+                        if (isset($projectData['details'])) {
+                            $project->projectDetail()->update([
+                                // Update project detail fields
+                            ]);
+                        }
+                    }
+                }
+            }
+
+            DB::commit();
+
+            return redirect()->route('citylocality.index')
+                ->with('success', 'City and localities updated successfully');
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->with('error', 'Failed to update city. ' . $e->getMessage())
+                ->withInput();
+        }
+    }
+
+    public function cityLocalityDestroy(City $city)
+    {
+        try {
+            DB::beginTransaction();
+
+            // Delete all related data
+            foreach ($city->localities as $locality) {
+                $locality->landmarks()->delete();
+                foreach ($locality->projects as $project) {
+                    $project->projectDetail()->delete();
+                    $project->delete();
+                }
+                $locality->delete();
+            }
+
+            $city->delete();
+
+            DB::commit();
+
+            return redirect()->route('citylocality.index')
+                ->with('success', 'City and all related data deleted successfully');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->route('citylocality.index')
+                ->with('error', 'Failed to delete city. Please try again.');
         }
     }
 }
